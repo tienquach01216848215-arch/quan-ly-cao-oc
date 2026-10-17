@@ -199,4 +199,17 @@
             img.src = url;
             img.style.display = 'block';
             container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
         }
+    }
+
+    // Hiển thị preview ngay khi mở form sửa
+    window.onload = function() {
+        var val = document.getElementById('inputHinhAnh').value;
+        if (val) previewImage(val);
+    };
+</script>
+
+</body>
+</html>
