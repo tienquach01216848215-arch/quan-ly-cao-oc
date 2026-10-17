@@ -1,5 +1,7 @@
 package com.example.quanlycaooc.controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.quanlycaooc.model.CanHo;
 import com.example.quanlycaooc.service.CanHoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.nio.file.*;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/can-ho")
@@ -17,6 +18,9 @@ public class CanHoController {
 
     @Autowired
     private CanHoService canHoService;
+
+    @Autowired
+    private Cloudinary cloudinary; // Tiêm Bean Cloudinary cấu hình từ CloudinaryConfig.java
 
     // 1. Danh sách căn hộ
     @GetMapping
@@ -48,13 +52,14 @@ public class CanHoController {
         return "canho/form";
     }
 
-    // 4. Lưu / Cập nhật căn hộ (Cơ chế Merge chống đè null)
+    // 4. Lưu / Cập nhật căn hộ (Đã tích hợp Cloudinary)
     @PostMapping("/luu")
     public String luuCanHo(@ModelAttribute("canHo") CanHo canHo,
                            @RequestParam(value = "fileAnh", required = false) MultipartFile fileAnh) {
         try {
             CanHo targetCanHo;
 
+            // Merge dữ liệu nếu là thao tác Cập nhật
             if (canHo.getMaCanHo() != null && !canHo.getMaCanHo().trim().isEmpty()
                     && canHoService.findById(canHo.getMaCanHo().trim()) != null) {
 
@@ -73,20 +78,11 @@ public class CanHoController {
                 targetCanHo = canHo;
             }
 
+            // Upload ảnh lên Cloudinary nếu người dùng chọn file từ thiết bị
             if (fileAnh != null && !fileAnh.isEmpty()) {
-                String fileName = System.currentTimeMillis() + "_" + fileAnh.getOriginalFilename();
-
-                Path uploadPath = Paths.get("src/main/resources/static/images/");
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                try (InputStream inputStream = fileAnh.getInputStream()) {
-                    Path filePath = uploadPath.resolve(fileName);
-                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                }
-
-                targetCanHo.setHinhAnh(fileName);
+                Map uploadResult = cloudinary.uploader().upload(fileAnh.getBytes(), ObjectUtils.emptyMap());
+                String urlOnline = uploadResult.get("secure_url").toString();
+                targetCanHo.setHinhAnh(urlOnline);
             }
 
             canHoService.save(targetCanHo);
