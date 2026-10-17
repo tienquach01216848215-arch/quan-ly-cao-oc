@@ -123,8 +123,11 @@
 <div class="form-container">
     <h2 th:text="${canHo.maCanHo == null || canHo.maCanHo == ''} ? 'THÊM CĂN HỘ MỚI' : 'CẬP NHẬT CĂN HỘ'"></h2>
 
-    <!-- BẮT BUỘC PHẢI CÓ enctype="multipart/form-data" ĐỂ TẢI ẢNH -->
+    <!-- FORM UPLOAD ẢNH NGUYÊN BẢN (GỬI FILE TỚI CLOUDINARY) -->
     <form th:action="@{/can-ho/luu}" th:object="${canHo}" method="post" enctype="multipart/form-data">
+
+        <!-- THẺ GIỮ LINK ẢNH CỦ KHI CẬP NHẬT -->
+        <input type="hidden" th:field="*{hinhAnh}" />
 
         <div class="form-group">
             <label>Mã Căn Hộ:</label>
@@ -133,15 +136,17 @@
                    required placeholder="Ví dụ: CH03" />
         </div>
 
-        <!-- Ô CHỌN HÌNH ẢNH CĂN HỘ -->
+        <!-- Ô CHỌN HÌNH ẢNH CĂN HỘ TỪ THIẾT BỊ -->
         <div class="form-group">
-            <label>Hình Ảnh Căn Hộ:</label>
+            <label>Hình Ảnh Căn Hộ (Tải từ thiết bị):</label>
             <input type="file" name="fileAnh" accept="image/*" />
 
             <!-- Xem trước ảnh hiện tại nếu đang chỉnh sửa -->
-            <div th:if="${canHo.hinhAnh}" style="margin-top: 10px;">
+            <div th:if="${canHo.hinhAnh != null and canHo.hinhAnh != ''}" style="margin-top: 10px;">
                 <small style="color: #aaaaaa;">Ảnh hiện tại:</small><br/>
-                <img th:src="@{'/images/' + ${canHo.hinhAnh}}" style="max-width: 150px; border-radius: 8px; margin-top: 5px; border: 1px solid #444;" />
+                <img th:src="${canHo.hinhAnh.startsWith('http') ? canHo.hinhAnh : '/images/' + canHo.hinhAnh}"
+                     onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'"
+                     style="max-width: 180px; max-height: 120px; border-radius: 8px; margin-top: 5px; border: 1px solid #444; object-fit: cover;" />
             </div>
         </div>
 
