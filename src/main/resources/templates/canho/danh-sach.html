@@ -2,35 +2,109 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh Sách Căn Hộ</title>
+    <title th:text="${canHo.maCanHo == null || canHo.maCanHo == ''} ? 'Thêm Căn Hộ Mới' : 'Cập Nhật Căn Hộ'"></title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background-color: #121212; color: #e0e0e0; }
-        h2 { color: #ffffff; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
 
-        .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #1e1e1e; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333333; }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-        .nav-item { color: #e0e0e0; text-decoration: none; padding: 8px 12px; border-radius: 5px; font-size: 14px; font-weight: 500; }
-        .nav-item:hover { background-color: #2c2c2c; color: #4da3ff; }
-        .nav-item.active { background-color: #4da3ff; color: #ffffff; font-weight: bold; }
+        /* THANH MENU ĐIỀU HƯỚNG */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e1e1e;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #333333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-item {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .nav-item:hover {
+            background-color: #2c2c2c;
+            color: #4da3ff;
+        }
+        .nav-item.active {
+            background-color: #4da3ff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .btn-logout {
+            background-color: transparent;
+            color: #f85149;
+            border: 1px solid #f85149;
+            padding: 8px 14px;
+        }
+        .btn-logout:hover {
+            background-color: #f85149;
+            color: #ffffff;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #1e1e1e; border-radius: 8px; overflow: hidden; }
-        th, td { border: 1px solid #333333; padding: 12px; text-align: left; vertical-align: middle; }
-        th { background-color: #2c2c2c; color: #4da3ff; font-weight: bold; }
-        tr:hover { background-color: #2a2a2a; }
+        /* FORM CONTAINER */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+        h2 { text-align: center; color: #ffffff; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #aaaaaa; }
 
-        .btn { padding: 8px 14px; text-decoration: none; color: white; border-radius: 5px; display: inline-block; font-size: 14px; }
-        .btn-add { background-color: #2ea043; margin-bottom: 15px; font-weight: bold; }
-        .btn-add:hover { background-color: #238636; }
-        .btn-edit { background-color: #d29922; color: #ffffff; }
-        .btn-edit:hover { background-color: #bd8a1f; }
-        .btn-delete { background-color: #f85149; }
-        .btn-delete:hover { background-color: #da3633; }
-        .btn-logout { background-color: transparent; color: #f85149; border: 1px solid #f85149; }
-        .btn-logout:hover { background-color: #f85149; color: #ffffff; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            color: #ffffff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus, select:focus { outline: none; border-color: #4da3ff; }
+        input::placeholder { color: #666666; }
+        input[readonly] { background-color: #222222; color: #888888; }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-submit { background-color: #2ea043; width: 48%; }
+        .btn-submit:hover { background-color: #238636; }
+        .btn-back { background-color: #3b3b3b; width: 48%; display: inline-block; text-align: center; box-sizing: border-box;}
+        .btn-back:hover { background-color: #4c4c4c; }
+        .button-group { display: flex; justify-content: space-between; margin-top: 20px; }
     </style>
 </head>
 <body>
 
+<!-- THANH MENU ĐIỀU HƯỚNG -->
 <div class="navbar">
     <div class="nav-links">
         <a th:href="@{/}" class="nav-item">📊 Trang Chủ</a>
@@ -46,49 +120,73 @@
     </div>
 </div>
 
-<h2>Quản Lý Danh Sách Căn Hộ</h2>
+<div class="form-container">
+    <h2 th:text="${canHo.maCanHo == null || canHo.maCanHo == ''} ? 'THÊM CĂN HỘ MỚI' : 'CẬP NHẬT CĂN HỘ'"></h2>
 
-<a th:href="@{/can-ho/them}" class="btn btn-add">+ Thêm Căn Hộ Mới</a>
+    <!-- FORM LƯU THÔNG TIN (ĐÃ BỎ enctype) -->
+    <form th:action="@{/can-ho/luu}" th:object="${canHo}" method="post">
 
-<table>
-    <thead>
-    <tr>
-        <th>Mã Căn Hộ</th>
-        <th>Hình Ảnh</th>
-        <th>Tên Căn Hộ</th>
-        <th>Loại Căn Hộ</th>
-        <th>Diện Tích (m²)</th>
-        <th>Số Tầng</th>
-        <th>Giá Bán</th>
-        <th>Trạng Thái</th>
-        <th>Hành Động</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="ch : ${danhSachCanHo}">
-        <td th:text="${ch?.maCanHo}"></td>
+        <div class="form-group">
+            <label>Mã Căn Hộ:</label>
+            <input type="text" th:field="*{maCanHo}"
+                   th:readonly="${canHo.maCanHo != null && canHo.maCanHo != ''}"
+                   required placeholder="Ví dụ: CH03" />
+        </div>
 
-        <td style="text-align: center;">
-            <img th:if="${ch?.hinhAnh}"
-                 th:src="@{'/images/' + ${ch.hinhAnh}}"
-                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;" />
-            <span th:unless="${ch?.hinhAnh}" style="color: #888888; font-size: 13px;">Chưa có ảnh</span>
-        </td>
+        <!-- Ô NHẬP LINK HÌNH ẢNH ONLINE -->
+        <div class="form-group">
+            <label>Link Hình Ảnh (URL Online):</label>
+            <input type="text" th:field="*{hinhAnh}" placeholder="Dán link ảnh (VD: https://images.unsplash.com/...)" />
 
-        <td th:text="${ch?.tenCanHo}"></td>
-        <td th:text="${ch?.loaiCanHo}"></td>
-        <td th:text="${ch?.dienTich}"></td>
-        <td th:text="${ch?.soTang}"></td>
-        <td th:text="${ch?.giaBan != null ? #numbers.formatDecimal(ch.giaBan, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : 'Chưa cập nhật'}"></td>
-        <td th:text="${ch?.trangThai}"></td>
-        <td>
-            <a th:href="@{/can-ho/sua/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-edit">Sửa</a>
-            <a th:href="@{/can-ho/xoa/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-delete"
-               onclick="return confirm('Bạn có chắc chắn muốn xóa căn hộ này?');">Xóa</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <!-- Xem trước ảnh hiện tại nếu có link -->
+            <div th:if="${canHo.hinhAnh != null and canHo.hinhAnh != ''}" style="margin-top: 10px;">
+                <small style="color: #aaaaaa;">Ảnh xem trước:</small><br/>
+                <img th:src="${canHo.hinhAnh.startsWith('http') ? canHo.hinhAnh : '/images/' + canHo.hinhAnh}"
+                     onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'"
+                     style="max-width: 180px; max-height: 120px; border-radius: 8px; margin-top: 5px; border: 1px solid #444; object-fit: cover;" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Tên Căn Hộ:</label>
+            <input type="text" th:field="*{tenCanHo}" required placeholder="Ví dụ: Căn hộ A301" />
+        </div>
+
+        <div class="form-group">
+            <label>Loại Căn Hộ:</label>
+            <input type="text" th:field="*{loaiCanHo}" placeholder="Ví dụ: 2 Phòng ngủ" />
+        </div>
+
+        <div class="form-group">
+            <label>Diện Tích (m²):</label>
+            <input type="number" step="0.1" th:field="*{dienTich}" placeholder="Ví dụ: 75.5" />
+        </div>
+
+        <div class="form-group">
+            <label>Số Tầng:</label>
+            <input type="number" th:field="*{soTang}" placeholder="Ví dụ: 8" />
+        </div>
+
+        <div class="form-group">
+            <label>Giá Bán (VNĐ):</label>
+            <input type="number" step="1000000" th:field="*{giaBan}" placeholder="Ví dụ: 2500000000" />
+        </div>
+
+        <div class="form-group">
+            <label>Trạng Thái:</label>
+            <select th:field="*{trangThai}">
+                <option value="Còn trống">Còn trống</option>
+                <option value="Đã cọc">Đã cọc</option>
+                <option value="Đã bán">Đã bán</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-submit">Lưu Dữ Liệu</button>
+            <a th:href="@{/can-ho}" class="btn btn-back">Hủy Bỏ</a>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
