@@ -4,33 +4,124 @@
     <meta charset="UTF-8">
     <title>Danh Sách Căn Hộ</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background-color: #121212; color: #e0e0e0; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        /* THANH MENU ĐIỀU HƯỚNG */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e1e1e;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #333333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-item {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .nav-item:hover {
+            background-color: #2c2c2c;
+            color: #4da3ff;
+        }
+        .nav-item.active {
+            background-color: #4da3ff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .btn-logout {
+            background-color: transparent;
+            color: #f85149;
+            border: 1px solid #f85149;
+            padding: 8px 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .btn-logout:hover {
+            background-color: #f85149;
+            color: #ffffff;
+        }
+
         h2 { color: #ffffff; }
 
-        .navbar { display: flex; justify-content: space-between; align-items: center; background-color: #1e1e1e; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333333; }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-        .nav-item { color: #e0e0e0; text-decoration: none; padding: 8px 12px; border-radius: 5px; font-size: 14px; font-weight: 500; }
-        .nav-item:hover { background-color: #2c2c2c; color: #4da3ff; }
-        .nav-item.active { background-color: #4da3ff; color: #ffffff; font-weight: bold; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #1e1e1e; border-radius: 8px; overflow: hidden; }
-        th, td { border: 1px solid #333333; padding: 12px; text-align: left; vertical-align: middle; }
-        th { background-color: #2c2c2c; color: #4da3ff; font-weight: bold; }
+        /* BẢNG DỮ LIỆU */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        th, td {
+            border: 1px solid #333333;
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #2c2c2c;
+            color: #4da3ff;
+            font-weight: bold;
+        }
         tr:hover { background-color: #2a2a2a; }
 
-        .btn { padding: 8px 14px; text-decoration: none; color: white; border-radius: 5px; display: inline-block; font-size: 14px; }
+        /* NÚT BẤM */
+        .btn {
+            padding: 8px 14px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 14px;
+            transition: 0.2s;
+        }
         .btn-add { background-color: #2ea043; margin-bottom: 15px; font-weight: bold; }
         .btn-add:hover { background-color: #238636; }
+
         .btn-edit { background-color: #d29922; color: #ffffff; }
         .btn-edit:hover { background-color: #bd8a1f; }
+
         .btn-delete { background-color: #f85149; }
         .btn-delete:hover { background-color: #da3633; }
-        .btn-logout { background-color: transparent; color: #f85149; border: 1px solid #f85149; }
-        .btn-logout:hover { background-color: #f85149; color: #ffffff; }
+
+        /* BADGE TRẠNG THÁI */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .bg-success { background-color: #2ea043; color: white; }
+        .bg-warning { background-color: #d29922; color: white; }
+        .bg-danger { background-color: #f85149; color: white; }
     </style>
 </head>
 <body>
 
+<!-- THANH MENU ĐIỀU HƯỚNG -->
 <div class="navbar">
     <div class="nav-links">
         <a th:href="@{/}" class="nav-item">📊 Trang Chủ</a>
@@ -42,48 +133,52 @@
         <a th:href="@{/thanh-toan}" class="nav-item">💰 Đặt Cọc & Thanh Toán</a>
     </div>
     <div>
-        <a th:href="@{/logout}" class="btn btn-logout">Đăng Xuất</a>
+        <a th:href="@{/logout}" class="btn-logout">Đăng Xuất</a>
     </div>
 </div>
 
-<h2>Quản Lý Danh Sách Căn Hộ</h2>
-
+<h2>Quản Lý Căn Hộ</h2>
 <a th:href="@{/can-ho/them}" class="btn btn-add">+ Thêm Căn Hộ Mới</a>
 
 <table>
     <thead>
     <tr>
-        <th>Mã Căn Hộ</th>
+        <th>Mã CH</th>
         <th>Hình Ảnh</th>
         <th>Tên Căn Hộ</th>
         <th>Loại Căn Hộ</th>
-        <th>Diện Tích (m²)</th>
+        <th>Diện Tích</th>
         <th>Số Tầng</th>
-        <th>Giá Bán</th>
+        <th>Giá Bán (VNĐ)</th>
         <th>Trạng Thái</th>
-        <th>Hành Động</th>
+        <th>Thao Tác</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="ch : ${danhSachCanHo}">
-        <td th:text="${ch?.maCanHo}"></td>
-
+        <td th:text="${ch?.maCanHo}" style="font-weight: bold; color: #4da3ff;"></td>
+        
+        <!-- CỘT HIỂN THỊ ẢNH XỬ LÝ LINK CLOUDINARY -->
         <td style="text-align: center;">
-            <img th:if="${ch?.hinhAnh}"
-                 th:src="@{'/images/' + ${ch.hinhAnh}}"
-                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;" />
-            <span th:unless="${ch?.hinhAnh}" style="color: #888888; font-size: 13px;">Chưa có ảnh</span>
+            <img th:src="${ch.hinhAnh != null and ch.hinhAnh.startsWith('http') ? ch.hinhAnh : (ch.hinhAnh != null and ch.hinhAnh != '' ? '/images/' + ch.hinhAnh : 'https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg')}"
+                 onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'"
+                 style="width: 100px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid #444;"
+                 alt="Hình căn hộ" />
         </td>
 
         <td th:text="${ch?.tenCanHo}"></td>
         <td th:text="${ch?.loaiCanHo}"></td>
-        <td th:text="${ch?.dienTich}"></td>
+        <td th:text="${ch?.dienTich != null ? ch.dienTich + ' m²' : ''}"></td>
         <td th:text="${ch?.soTang}"></td>
-        <td th:text="${ch?.giaBan != null ? #numbers.formatDecimal(ch.giaBan, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : 'Chưa cập nhật'}"></td>
-        <td th:text="${ch?.trangThai}"></td>
+        <td th:text="${ch?.giaBan != null ? #numbers.formatDecimal(ch.giaBan, 0, 'COMMA', 0, 'POINT') : ''}"></td>
         <td>
-            <a th:href="@{/can-ho/sua/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-edit">Sửa</a>
-            <a th:href="@{/can-ho/xoa/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-delete"
+            <span th:text="${ch?.trangThai}"
+                  th:classappend="${ch?.trangThai == 'Còn trống' ? 'badge bg-success' : (ch?.trangThai == 'Đã cọc' ? 'badge bg-warning' : 'badge bg-danger')}">
+            </span>
+        </td>
+        <td>
+            <a th:href="@{/can-ho/sua/{id}(id=${ch.maCanHo})}" class="btn btn-edit">Sửa</a>
+            <a th:href="@{/can-ho/xoa/{id}(id=${ch.maCanHo})}" class="btn btn-delete"
                onclick="return confirm('Bạn có chắc chắn muốn xóa căn hộ này?');">Xóa</a>
         </td>
     </tr>
