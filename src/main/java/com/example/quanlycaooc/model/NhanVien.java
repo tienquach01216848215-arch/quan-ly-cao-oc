@@ -1,9 +1,6 @@
 package com.example.quanlycaooc.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "NhanVien")
@@ -13,16 +10,16 @@ public class NhanVien {
     @Column(name = "MaNhanVien")
     private String maNhanVien;
 
-    @Column(name = "TenNhanVien", columnDefinition = "nvarchar(255)")
+    @Column(name = "TenNhanVien")
     private String tenNhanVien;
 
-    @Column(name = "ChucVu", columnDefinition = "nvarchar(255)")
+    @Column(name = "ChucVu")
     private String chucVu;
 
-    @Column(name = "SoDienThoai", columnDefinition = "nvarchar(20)")
+    @Column(name = "SoDienThoai")
     private String soDienThoai;
 
-    @Column(name = "Email", columnDefinition = "nvarchar(255)")
+    @Column(name = "Email")
     private String email;
 
     public NhanVien() {
