@@ -1,7 +1,6 @@
 package com.example.quanlycaooc.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "CanHo")
@@ -11,11 +10,9 @@ public class CanHo {
     @Column(name = "MaCanHo")
     private String maCanHo;
 
-    @Nationalized
     @Column(name = "TenCanHo")
     private String tenCanHo;
 
-    @Nationalized
     @Column(name = "LoaiCanHo")
     private String loaiCanHo;
 
@@ -28,7 +25,6 @@ public class CanHo {
     @Column(name = "GiaBan")
     private Double giaBan;
 
-    @Nationalized
     @Column(name = "TrangThai")
     private String trangThai;
 
