@@ -22,7 +22,7 @@ public class AuthController {
         return "login";
     }
 
-    // 2. Xử lý nút Đăng Nhập (Đồng bộ tên tham số tenDangNhap & matKhau)
+    // 2. Xử lý nút Đăng Nhập
     @PostMapping("/login")
     public String handleLogin(@RequestParam("tenDangNhap") String tenDangNhap,
                               @RequestParam("matKhau") String matKhau,
@@ -32,7 +32,6 @@ public class AuthController {
         String cleanUser = (tenDangNhap != null) ? tenDangNhap.trim() : "";
         String cleanPass = (matKhau != null) ? matKhau.trim() : "";
 
-        // Tìm người dùng trong Database (Cắt sạch khoảng trắng CHAR của SQL Server)
         List<NguoiDung> listUser = nguoiDungRepository.findAll();
         NguoiDung foundUser = null;
 
@@ -47,20 +46,49 @@ public class AuthController {
         }
 
         if (foundUser != null) {
-            // ĐĂNG NHẬP THÀNH CÔNG -> Lưu người dùng vào Session
             session.setAttribute("user", foundUser);
             session.setAttribute("nguoiDung", foundUser);
 
             System.out.println("✅ Đăng nhập thành công: " + foundUser.getTenDangNhap());
             return "redirect:/"; // Chuyển thẳng về trang chủ Dashboard
         } else {
-            // ĐĂNG NHẬP THẤT BẠI -> Báo lỗi khớp với variable ${error} trong login.html
             model.addAttribute("error", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             return "login";
         }
     }
 
-    // 3. Đăng xuất
+    // 3. Hiển thị form đăng ký (/register)
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("nguoiDung", new NguoiDung());
+        return "register"; // Trỏ tới file register.html trong templates
+    }
+
+    // 4. Xử lý nút Đăng ký tài khoản mới
+    @PostMapping("/register")
+    public String handleRegister(@ModelAttribute("nguoiDung") NguoiDung nguoiDung, Model model) {
+        // Kiểm tra xem Tên đăng nhập đã tồn tại trong CSDL chưa
+        List<NguoiDung> listUser = nguoiDungRepository.findAll();
+        for (NguoiDung u : listUser) {
+            if (u.getTenDangNhap() != null && u.getTenDangNhap().trim().equalsIgnoreCase(nguoiDung.getTenDangNhap().trim())) {
+                model.addAttribute("error", "Tên đăng nhập này đã được sử dụng!");
+                return "register";
+            }
+        }
+
+        // Gán vai trò mặc định là USER nếu chưa có
+        if (nguoiDung.getVaiTro() == null || nguoiDung.getVaiTro().trim().isEmpty()) {
+            nguoiDung.setVaiTro("USER");
+        }
+
+        // Lưu tài khoản mới vào CSDL PostgreSQL
+        nguoiDungRepository.save(nguoiDung);
+        System.out.println("✅ Đăng ký tài khoản mới thành công: " + nguoiDung.getTenDangNhap());
+
+        return "redirect:/login"; // Đăng ký thành công -> Chuyển về trang đăng nhập
+    }
+
+    // 5. Đăng xuất
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // Xóa sạch session
