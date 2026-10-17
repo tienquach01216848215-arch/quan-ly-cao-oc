@@ -123,7 +123,8 @@
 <div class="form-container">
     <h2 th:text="${canHo.maCanHo == null || canHo.maCanHo == ''} ? 'THÊM CĂN HỘ MỚI' : 'CẬP NHẬT CĂN HỘ'"></h2>
 
-    <form th:action="@{/can-ho/luu}" th:object="${canHo}" method="post">
+    <!-- BẮT BUỘC PHẢI CÓ enctype="multipart/form-data" ĐỂ TẢI ẢNH -->
+    <form th:action="@{/can-ho/luu}" th:object="${canHo}" method="post" enctype="multipart/form-data">
 
         <div class="form-group">
             <label>Mã Căn Hộ:</label>
@@ -132,21 +133,15 @@
                    required placeholder="Ví dụ: CH03" />
         </div>
 
-        <!-- Ô NHẬP LINK HÌNH ẢNH URL -->
+        <!-- Ô CHỌN HÌNH ẢNH CĂN HỘ -->
         <div class="form-group">
-            <label>Link Hình Ảnh (URL Online):</label>
-            <input type="text" th:field="*{hinhAnh}" id="inputHinhAnh"
-                   placeholder="Dán link ảnh (VD: https://images.unsplash.com/...)" 
-                   oninput="previewImage(this.value)" />
-            <small style="color: #888888; font-size: 12px; margin-top: 4px; display: block;">
-                💡 Dán đường dẫn URL ảnh từ Google / Unsplash / Imgur.
-            </small>
+            <label>Hình Ảnh Căn Hộ:</label>
+            <input type="file" name="fileAnh" accept="image/*" />
 
-            <!-- Khung xem trước ảnh -->
-            <div id="previewContainer" style="margin-top: 10px; display: none;">
-                <small style="color: #aaaaaa;">Xem trước hình ảnh:</small><br/>
-                <img id="imgPreview" style="max-width: 100%; max-height: 180px; border-radius: 8px; margin-top: 5px; border: 1px solid #444; object-fit: cover;" 
-                     onerror="this.style.display='none'" />
+            <!-- Xem trước ảnh hiện tại nếu đang chỉnh sửa -->
+            <div th:if="${canHo.hinhAnh}" style="margin-top: 10px;">
+                <small style="color: #aaaaaa;">Ảnh hiện tại:</small><br/>
+                <img th:src="@{'/images/' + ${canHo.hinhAnh}}" style="max-width: 150px; border-radius: 8px; margin-top: 5px; border: 1px solid #444;" />
             </div>
         </div>
 
@@ -190,26 +185,6 @@
         </div>
     </form>
 </div>
-
-<script>
-    function previewImage(url) {
-        var container = document.getElementById('previewContainer');
-        var img = document.getElementById('imgPreview');
-        if (url && url.trim() !== '') {
-            img.src = url;
-            img.style.display = 'block';
-            container.style.display = 'block';
-        } else {
-            container.style.display = 'none';
-        }
-    }
-
-    // Hiển thị preview ngay khi mở form sửa
-    window.onload = function() {
-        var val = document.getElementById('inputHinhAnh').value;
-        if (val) previewImage(val);
-    };
-</script>
 
 </body>
 </html>
