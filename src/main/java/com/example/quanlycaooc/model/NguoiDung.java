@@ -17,13 +17,13 @@ public class NguoiDung {
     @Column(name = "MatKhau")
     private String matKhau;
 
-    @Column(name = "HoTen", columnDefinition = "nvarchar(255)")
+    @Column(name = "HoTen")
     private String hoTen;
 
     @Column(name = "Email")
     private String email;
 
-    @Column(name = "VaiTro", columnDefinition = "nvarchar(100)")
+    @Column(name = "VaiTro")
     private String vaiTro;
 
     // Constructor mặc định (bắt buộc đối với JPA Entity)
