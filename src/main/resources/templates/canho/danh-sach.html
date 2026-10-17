@@ -69,26 +69,14 @@
         <td th:text="${ch?.maCanHo}"></td>
 
         <td style="text-align: center;">
-            <img th:if="${ch?.hinhAnh}"
-                 th:src="@{'/images/' + ${ch.hinhAnh}}"
-                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;" />
-            <span th:unless="${ch?.hinhAnh}" style="color: #888888; font-size: 13px;">Chưa có ảnh</span>
+            <img th:src="${ch?.hinhAnh != null and ch?.hinhAnh != '' ? (ch.hinhAnh.startsWith('http') ? ch.hinhAnh : '/images/' + ch.hinhAnh) : 'https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'}"
+                 onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'"
+                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;" 
+                 alt="Hình căn hộ" />
         </td>
 
         <td th:text="${ch?.tenCanHo}"></td>
         <td th:text="${ch?.loaiCanHo}"></td>
         <td th:text="${ch?.dienTich}"></td>
         <td th:text="${ch?.soTang}"></td>
-        <td th:text="${ch?.giaBan != null ? #numbers.formatDecimal(ch.giaBan, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : 'Chưa cập nhật'}"></td>
-        <td th:text="${ch?.trangThai}"></td>
-        <td>
-            <a th:href="@{/can-ho/sua/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-edit">Sửa</a>
-            <a th:href="@{/can-ho/xoa/{id}(id=${#strings.trim(ch.maCanHo)})}" class="btn btn-delete"
-               onclick="return confirm('Bạn có chắc chắn muốn xóa căn hộ này?');">Xóa</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-</body>
-</html>
+        <td th:text="${ch?.giaBan != null ? #numbers.formatDecimal(ch.giaBan, 0, 'COMMA', 0,
