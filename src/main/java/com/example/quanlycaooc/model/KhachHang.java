@@ -1,8 +1,6 @@
 package com.example.quanlycaooc.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Nationalized;
-
 import java.util.List;
 
 @Entity
@@ -13,7 +11,6 @@ public class KhachHang {
     @Column(name = "MaKhachHang")
     private String maKhachHang;
 
-    @Nationalized
     @Column(name = "TenKhachHang")
     private String tenKhachHang;
 
@@ -26,11 +23,10 @@ public class KhachHang {
     @Column(name = "CCCD")
     private String cccd;
 
-    @Nationalized
     @Column(name = "DiaChi")
     private String diaChi;
 
-    // --- BỔ SUNG QUAN HỆ CASCADE ĐỂ XÓA TỰ ĐỘNG BẢN GHI PHỤ THUỘC ---
+    // --- BỔ SUNG QUAN HỆ CASCADE ĐỂ XÓA TỰ ĐỘNG BẢN GHI PHỤ THUỘ ---
 
     // Auto-delete các bản ghi Thanh toán thuộc về Khách hàng này
     @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, orphanRemoval = true)
