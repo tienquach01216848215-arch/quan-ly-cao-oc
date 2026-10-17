@@ -74,7 +74,7 @@
                         th:value="${ch.maCanHo}"
                         th:text="${ch.tenCanHo + ' - Tầng ' + ch.soTang + (ch.trangThai == 'Đã cọc' ? ' 🚫 [ĐÃ CỌC - KHÔNG THỂ CHỌN]' : '')}"
                         th:selected="${ch.maCanHo == selectedMaCanHo}"
-                        th:disabled="${ch.trangThai == 'Đã cọc'}"> <!-- Vô hiệu hóa nếu Đã cọc -->
+                        th:disabled="${ch.trangThai == 'Đã cọc'}">
                 </option>
             </select>
         </div>
@@ -96,10 +96,10 @@
         <!-- KHUNG HIỂN THỊ MÃ QR CODE CHUYỂN KHOẢN -->
         <div id="qrContainer" class="qr-container">
             <h4>📲 Quét mã QR để chuyển khoản</h4>
-            <!-- Nếu bạn có file ảnh QR riêng, hãy lưu tại static/images/qr-bank.jpg -->
-            <img id="qrImage" src="/images/qr-bank.jpg" class="qr-image" alt="Mã QR Chuyển Khoản"
-                 onerror="this.src='https://img.vietqr.io/image/MB-0345678999-compact2.png?amount=50000000&addInfo=DAT%20COC%20CAN%20HO'"/>
-            <p class="qr-desc">Vui lòng mở ứng dụng Ngân hàng (MB, Vietcombank, Techcombank...) quét mã để hoàn tất đặt cọc.</p>
+            <!-- ĐÃ CẬP NHẬT: FALLBACK LẤY TRỰC TIẾP TỪ GITHUB RAW -->
+            <img id="qrImage" th:src="@{/images/qr-bank.jpg}" class="qr-image" alt="Mã QR Chuyển Khoản"
+                 onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/qr-bank.jpg'"/>
+            <p class="qr-desc">Vui lòng mở ứng dụng Ngân hàng quét mã để hoàn tất đặt cọc.</p>
         </div>
 
         <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT CỌC</button>
