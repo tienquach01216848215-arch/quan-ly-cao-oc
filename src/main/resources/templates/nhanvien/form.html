@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${nhanVien.maNhanVien == null || nhanVien.maNhanVien == ''} ? 'Thêm Nhân Viên' : 'Sửa Nhân Viên'"></title>
+    <style> /* THANH MENU ĐIỀU HƯỚNG */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1e1e1e;
+        padding: 12px 18px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        border: 1px solid #333333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .nav-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .nav-item {
+        color: #e0e0e0;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: 0.2s;
+        font-weight: 500;
+    }
+    .nav-item:hover {
+        background-color: #2c2c2c;
+        color: #4da3ff;
+    }
+    .nav-item.active {
+        background-color: #4da3ff;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    .btn-logout {
+        background-color: transparent;
+        color: #f85149;
+        border: 1px solid #f85149;
+        padding: 8px 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+        font-weight: bold;
+    }
+    .btn-logout:hover {
+        background-color: #f85149;
+        color: #ffffff;
+    }
+        /* GIAO DIỆN DARK MODE */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 30px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+        h2 { text-align: center; color: #ffffff; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #aaaaaa; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            color: #ffffff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus { outline: none; border-color: #4da3ff; }
+        input::placeholder { color: #666666; }
+        input[readonly] { background-color: #222222; color: #888888; } /* Màu tối hơn cho ô không được sửa */
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-submit { background-color: #2ea043; width: 48%; }
+        .btn-submit:hover { background-color: #238636; }
+
+        .btn-back { background-color: #3b3b3b; width: 48%; display: inline-block; text-align: center; box-sizing: border-box;}
+        .btn-back:hover { background-color: #4c4c4c; }
+
+        .button-group { display: flex; justify-content: space-between; margin-top: 25px; }
+    </style>
+</head>
+<body> <!-- THANH MENU ĐIỀU HƯỚNG -->
+<div class="navbar">
+    <div class="nav-links">
+        <a th:href="@{/}" class="nav-item">📊 Trang Chủ</a>
+        <a th:href="@{/can-ho}" class="nav-item">🏢 Căn Hộ</a>
+        <a th:href="@{/khach-hang}" class="nav-item">👥 Khách Hàng</a>
+        <a th:href="@{/nhan-vien}" class="nav-item">👔 Nhân Viên</a>
+        <a th:href="@{/lich-hen}" class="nav-item">📅 Lịch Hẹn</a>
+        <a th:href="@{/ho-so}" class="nav-item">📑 Xét Duyệt Hồ Sơ</a>
+        <a th:href="@{/thanh-toan}" class="nav-item">💰 Đặt Cọc & Thanh Toán</a>
+    </div>
+    <div>
+        <a th:href="@{/logout}" class="btn-logout">Đăng Xuất</a>
+    </div>
+</div>
+
+<div class="form-container">
+    <h2 th:text="${nhanVien.maNhanVien == null || nhanVien.maNhanVien == ''} ? 'THÊM NHÂN VIÊN' : 'CẬP NHẬT NHÂN VIÊN'"></h2>
+
+    <!-- Lưu ý: Action đang trỏ về /nhan-vien/luu. Đảm bảo Controller của bạn đã map đúng đường dẫn này -->
+    <form th:action="@{/nhan-vien/luu}" th:object="${nhanVien}" method="post">
+
+        <div class="form-group">
+            <label>Mã Nhân Viên:</label>
+            <!-- Nếu là Sửa (đã có mã) thì không cho sửa mã nữa (readonly) -->
+            <input type="text" th:field="*{maNhanVien}"
+                   th:readonly="${nhanVien.maNhanVien != null && nhanVien.maNhanVien != ''}"
+                   required placeholder="Ví dụ: NV01" />
+        </div>
+
+        <div class="form-group">
+            <label>Tên Nhân Viên:</label>
+            <input type="text" th:field="*{tenNhanVien}" required placeholder="Ví dụ: Trần Văn B" />
+        </div>
+
+        <div class="form-group">
+            <label>Số Điện Thoại:</label>
+            <input type="text" th:field="*{soDienThoai}" placeholder="Ví dụ: 0912345678" />
+        </div>
+
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" placeholder="Ví dụ: nhanvien@example.com" />
+        </div>
+
+        <div class="form-group">
+            <label>Chức Vụ:</label>
+            <input type="text" th:field="*{chucVu}" placeholder="Ví dụ: Quản lý / Môi giới" />
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-submit">Lưu Dữ Liệu</button>
+            <a th:href="@{/nhan-vien}" class="btn btn-back">Hủy Bỏ</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

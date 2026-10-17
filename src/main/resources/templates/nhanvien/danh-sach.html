@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Nhân Viên</title>
+    <style> /* THANH MENU ĐIỀU HƯỚNG */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1e1e1e;
+        padding: 12px 18px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        border: 1px solid #333333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .nav-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .nav-item {
+        color: #e0e0e0;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: 0.2s;
+        font-weight: 500;
+    }
+    .nav-item:hover {
+        background-color: #2c2c2c;
+        color: #4da3ff;
+    }
+    .nav-item.active {
+        background-color: #4da3ff;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    .btn-logout {
+        background-color: transparent;
+        color: #f85149;
+        border: 1px solid #f85149;
+        padding: 8px 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+        font-weight: bold;
+    }
+    .btn-logout:hover {
+        background-color: #f85149;
+        color: #ffffff;
+    }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background-color: #121212; color: #e0e0e0; }
+        h2 { color: #ffffff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #1e1e1e; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        th, td { border: 1px solid #333333; padding: 12px; text-align: left; }
+        th { background-color: #2c2c2c; color: #4da3ff; font-weight: bold; }
+        tr:hover { background-color: #2a2a2a; }
+        .btn { padding: 8px 14px; text-decoration: none; color: white; border-radius: 5px; display: inline-block; font-size: 14px; transition: 0.2s; }
+        .btn-add { background-color: #2ea043; margin-bottom: 15px; font-weight: bold; }
+        .btn-add:hover { background-color: #238636; }
+        .btn-edit { background-color: #d29922; color: #ffffff; }
+        .btn-edit:hover { background-color: #bd8a1f; }
+        .btn-delete { background-color: #f85149; }
+        .btn-delete:hover { background-color: #da3633; }
+    </style>
+</head>
+<body> <!-- THANH MENU ĐIỀU HƯỚNG -->
+<div class="navbar">
+    <div class="nav-links">
+        <a th:href="@{/}" class="nav-item">📊 Trang Chủ</a>
+        <a th:href="@{/can-ho}" class="nav-item">🏢 Căn Hộ</a>
+        <a th:href="@{/khach-hang}" class="nav-item">👥 Khách Hàng</a>
+        <a th:href="@{/nhan-vien}" class="nav-item">👔 Nhân Viên</a>
+        <a th:href="@{/lich-hen}" class="nav-item">📅 Lịch Hẹn</a>
+        <a th:href="@{/ho-so}" class="nav-item">📑 Xét Duyệt Hồ Sơ</a>
+        <a th:href="@{/thanh-toan}" class="nav-item">💰 Đặt Cọc & Thanh Toán</a>
+    </div>
+    <div>
+        <a th:href="@{/logout}" class="btn-logout">Đăng Xuất</a>
+    </div>
+</div>
+<h2>Quản Lý Nhân Viên</h2>
+<a th:href="@{/nhan-vien/them}" class="btn btn-add">+ Thêm Nhân Viên Mới</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Mã NV</th>
+        <th>Tên Nhân Viên</th>
+        <th>Số Điện Thoại</th>
+        <th>Email</th>
+        <th>Chức Vụ</th>
+        <th>Thao Tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="nv : ${danhSachNhanVien}">
+        <td th:text="${nv?.maNhanVien}"></td>
+        <td th:text="${nv?.tenNhanVien}"></td>
+        <td th:text="${nv?.soDienThoai}"></td>
+        <td th:text="${nv?.email}"></td>
+        <td th:text="${nv?.chucVu}"></td>
+        <td>
+            <a th:href="@{/nhan-vien/sua/{id}(id=${nv.maNhanVien})}" class="btn btn-edit">Sửa</a>
+            <a th:href="@{/nhan-vien/xoa/{id}(id=${nv.maNhanVien})}" class="btn btn-delete"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
