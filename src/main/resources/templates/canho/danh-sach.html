@@ -68,12 +68,11 @@
     <tr th:each="ch : ${danhSachCanHo}">
         <td th:text="${ch?.maCanHo}"></td>
 
-        <!-- HIỂN THỊ HÌNH ẢNH THÔNG MINH -->
         <td style="text-align: center;">
-            <img th:src="${#strings.isEmpty(ch?.hinhAnh) ? 'https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg' : (ch.hinhAnh.startsWith('http') ? ch.hinhAnh : '/images/' + ch.hinhAnh)}"
-                 onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'"
-                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;"
-                 alt="Căn hộ" />
+            <img th:if="${ch?.hinhAnh}"
+                 th:src="@{'/images/' + ${ch.hinhAnh}}"
+                 style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px;" />
+            <span th:unless="${ch?.hinhAnh}" style="color: #888888; font-size: 13px;">Chưa có ảnh</span>
         </td>
 
         <td th:text="${ch?.tenCanHo}"></td>
