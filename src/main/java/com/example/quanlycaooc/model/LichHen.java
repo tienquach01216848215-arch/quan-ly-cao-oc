@@ -1,7 +1,6 @@
 package com.example.quanlycaooc.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Nationalized;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
@@ -30,11 +29,9 @@ public class LichHen {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate ngayHen;
 
-    @Nationalized
     @Column(name = "TrangThai")
     private String trangThai;
 
-    @Nationalized
     @Column(name = "GhiChu")
     private String ghiChu;
 
