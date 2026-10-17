@@ -66,10 +66,10 @@
             background-color: #238636 !important;
         }
 
-        /* --- HERO BANNER --- */
+        /* --- HERO BANNER (ĐÃ SỬA URL ẢNH RAW GITHUB) --- */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
-            url('/images/messi_toanha.jpg') center/cover no-repeat;
+            url('https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg') center/cover no-repeat;
             min-height: 480px;
             display: flex;
             flex-direction: column;
@@ -306,11 +306,11 @@
     <!-- CĂN HỘ NỔI BẬT -->
     <h2 class="section-title">CĂN HỘ NỔI BẬT</h2>
     <div class="apartment-grid">
-        <!-- Lặp danh sách căn hộ từ Database -->
+        <!-- Lặp danh sách căn hộ từ Database (Đã tối ưu hóa đường dẫn ảnh) -->
         <div th:each="ch, iterStat : ${danhSachCanHo}" th:if="${iterStat.index < 3}" class="apartment-card">
-            <img th:src="${ch.hinhAnh != null ? '/images/' + ch.hinhAnh : '/images/messi_toanha.jpg'}"
+            <img th:src="${ch.hinhAnh != null ? (ch.hinhAnh.startsWith('http') ? ch.hinhAnh : 'https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg') : 'https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'}"
                  class="apartment-img" alt="Hình căn hộ"
-                 onerror="this.src='https://via.placeholder.com/400x200/2c2c2c/ffffff?text=Cao+Oc+Residence'">
+                 onerror="this.src='https://raw.githubusercontent.com/tienquach01216848215-arch/quan-ly-cao-oc/main/src/main/resources/static/images/messi_toanha.jpg'">
 
             <div class="apartment-info">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
